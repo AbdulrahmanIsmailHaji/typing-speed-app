@@ -1,0 +1,100 @@
+ const [words, setWords] = useState([]);
+  const [countDown, setCountDown] = useState(SECONDS);
+  const [currInput, setCurrInput] = useState("");
+  const [currWordIndex, setCurrWordIndex] = useState(0);
+  const [currCharIndex, setCurrCharIndex] = useState(-1);
+  const [currChar, setCurrChar] = useState("");
+  const [correct, setCorrect] = useState(0);
+  const [incorrect, setIncorrect] = useState(0);
+  const [status, setStatus] = useState("waiting");
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    setWords(generateWords());
+  }, []);
+
+  useEffect(() => {
+    if (status === "started") {
+      inputRef.current.focus();
+    }
+  }, [status]);
+
+  function generateWords() {
+    return new Array(NUMB_OF_WORDS).fill(null).map(() => generate());
+  }
+
+  function handleStart() {
+    if (status === "finished") {
+      setWords(generateWords());
+      setCurrWordIndex(0);
+      setCorrect(0);
+      setIncorrect(0);
+      setCurrCharIndex(-1);
+      setCurrChar("");
+    }
+
+    if (status !== "started") {
+      setStatus("started");
+      let interval = setInterval(() => {
+        setCountDown((prevCountdown) => {
+          if (prevCountdown === 0) {
+            clearInterval(interval);
+            setStatus("finished");
+            setCurrInput("");
+            return SECONDS;
+          } else {
+            return prevCountdown - 1;
+          }
+        });
+      }, 1000);
+    }
+  }
+
+  function handleKeyDown({ keyCode, key }) {
+    // space bar
+    if (keyCode === 32) {
+      checkMatch();
+      setCurrInput("");
+      setCurrWordIndex(currWordIndex + 1);
+      setCurrCharIndex(-1);
+      // backspace
+    } else if (keyCode === 8) {
+      setCurrCharIndex(currCharIndex - 1);
+      setCurrChar("");
+    } else {
+      setCurrCharIndex(currCharIndex + 1);
+      setCurrChar(key);
+    }
+  }
+
+  function checkMatch() {
+    const wordToCompare = words[currWordIndex];
+    const doesItMatch = wordToCompare === currInput.trim();
+    if (doesItMatch) {
+      setCorrect(correct + 1);
+    } else {
+      setIncorrect(incorrect + 1);
+    }
+  }
+
+  function getCharClass(wordIdx, charIdx, char) {
+    if (
+      wordIdx === currWordIndex &&
+      charIdx === currCharIndex &&
+      currChar &&
+      status !== "finished"
+    ) {
+      if (char === currChar) {
+        return "has-background-success";
+      } else {
+        return "has-background-danger";
+      }
+    } else if (
+      wordIdx === currWordIndex &&
+      currCharIndex >= words[currWordIndex].length
+    ) {
+      return "has-background-danger";
+    } else {
+      return "";
+    }
+  }
