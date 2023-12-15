@@ -1,7 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  font-size: 25px;
+  font-size: 30px;
 }
 body {
   background-color: #487346;
@@ -15,6 +15,9 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+h1 h2 h3 h4 {
+  color: #fff;
 }
 .countdown {
   text-align: center;
@@ -44,6 +47,12 @@ h1 {
   justify-content: center;
   align-items: center;
   margin: 15px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
 }
 .input-field label {
   color: white;
@@ -61,10 +70,27 @@ h1 {
 }
 
 .has-background-success {
-  background-color: #487346;
+  background-color: #28a745;
+  color: #fff;
+  display: inline-block;
+  animation: blink 1s infinite;
 }
 .has-background-danger {
-  background-color: red;
+  background-color: #dc3545;
+  color: #fff;
+  display: inline-block;
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .section {
@@ -95,5 +121,28 @@ h1 {
 
 .sec {
   border: none;
-  width: 80px;
+  width: 40px;
+  text-align: center;
+  padding: 20px;
+}
+.has-gray-background {
+  background-color: gray;
+}
+
+.top {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 15px;
+  padding: 10px;
+}
+.score {
+  -webkit-box-shadow: 1px 6px 11px 1px rgba(0, 0, 0, 0.55);
+  -moz-box-shadow: 1px 6px 11px 1px rgba(0, 0, 0, 0.55);
+  box-shadow: 1px 6px 11px 1px rgba(0, 0, 0, 0.55);
+  padding: 25px;
+  width: 450px;
+  height: 100px;
+  text-align: center;
+  color: #fff;
 }

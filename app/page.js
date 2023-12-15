@@ -7,8 +7,8 @@ const NUMB_OF_WORDS = 200;
 
 export default function Home() {
   const [words, setWords] = useState([]);
-  const [secondes, setSecondes] = useState(0);
-  const [countDown, setCountDown] = useState(secondes);
+  const [selectedTime, setSelectedTime] = useState(60);
+  const [countDown, setCountDown] = useState(0);
   const inputRef = useRef(null);
   const [status, setStatus] = useState();
   const [currInput, setCurrInput] = useState("");
@@ -17,6 +17,7 @@ export default function Home() {
   const [currChar, setCurrChar] = useState("");
   const [correct, setCorrect] = useState(0);
   const [incorrect, setIncorrect] = useState(0);
+  const [scores, setScores] = useState(0);
 
   const generateWord = () => {
     return new Array(NUMB_OF_WORDS).fill(null).map(() => generate());
@@ -26,13 +27,20 @@ export default function Home() {
     setWords(generateWord());
   }, []);
   useEffect(() => {
+    if (status === "finished") {
+      updateScores();
+    }
+    console.log("score is updated", scores);
+  }, [status]);
+  useEffect(() => {
+    setCountDown(selectedTime);
+  }, [selectedTime]);
+  useEffect(() => {
     if (status === "started") {
       inputRef.current.focus();
     }
   }, [status]);
-  useEffect(() => {
-    setCountDown(secondes);
-  }, [secondes]);
+
   const handleStart = () => {
     if (status === "finished") {
       setWords(generateWord());
@@ -41,6 +49,7 @@ export default function Home() {
       setIncorrect(0);
       setCurrCharIndex(-1);
       setCurrChar("");
+      updateScores();
     }
     if (status !== "started") {
       setStatus("started");
@@ -50,7 +59,7 @@ export default function Home() {
             clearInterval(interval);
             setStatus("finished");
             setCurrInput("");
-            return secondes;
+            return selectedTime;
           } else {
             return prev - 1;
           }
@@ -104,36 +113,53 @@ export default function Home() {
       setIncorrect(incorrect + 1);
     }
   };
+  const handleTimeChange = (e) => {
+    setSelectedTime(parseInt(e.target.value, 10));
+  };
+
+  const updateScores = () => {
+    if (scores === 0) {
+      setScores(correct);
+    } else if (correct > scores) {
+      setScores(correct);
+    }
+  };
 
   return (
     <>
-      <div className="bt">
-        <h1>Let's know how much power do you have in typing</h1>
-        <button onClick={handleStart} disabled={secondes === 0}>
-          {" "}
-          START
-        </button>
-        <p>please enter a time that you want to practice with</p>
-        <input
-          type="number"
-          className="sec"
-          onChange={(e) => setSecondes(e.target.value)}
-          value={secondes}
-        />
-        <p>({countDown})</p>
-      </div>
-      <h1>Hurry Up Your Time Is running out</h1>
-      <div className="input-field">
-        <label htmlFor="input">Typing Here:</label>
-        <input
-          value={currInput}
-          onKeyDown={handleKeyDown}
-          ref={inputRef}
-          type="text"
-          id="input"
-          name="input"
-          onChange={(e) => setCurrInput(e.target.value)}
-        />
+      <h1>Let's know how much power do you have in word typing</h1>
+      <div className="top">
+        <div className="bt">
+          <h2 style={{ color: "white" }}>
+            you can start by choosing a time then press start button{" "}
+          </h2>
+          <button onClick={handleStart}> START</button>
+          <p>Please Choose A Time</p>
+          <select onChange={handleTimeChange} value={selectedTime}>
+            <option value={60}>60 seconds</option>
+            <option value={30}>30 seconds</option>
+            <option value={15}>15 seconds</option>
+          </select>
+          <p>({countDown})</p>
+        </div>
+
+        <div className="score">
+          <p>This is the score record:</p>
+          <p>
+            Words per {selectedTime}: {scores.toFixed(2)}
+          </p>
+        </div>
+        <div className="input-field">
+          <textarea
+            value={currInput}
+            onKeyDown={handleKeyDown}
+            ref={inputRef}
+            type="text"
+            id="input"
+            name="input"
+            onChange={(e) => setCurrInput(e.target.value)}
+          />
+        </div>
       </div>
       {status === "started" && (
         <div className="paragraph">
@@ -156,7 +182,7 @@ export default function Home() {
         <div className="section">
           <div className="columns">
             <div className="column has-text-centered">
-              {<p>Words per {secondes} secondes:</p>}
+              {<p>Words per {selectedTime}:</p>}
               <p className="has-text-primary ">{correct}</p>
             </div>
             <div className="column has-text-centered">
