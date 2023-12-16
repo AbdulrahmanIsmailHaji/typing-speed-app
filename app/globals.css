@@ -25,10 +25,12 @@ h1 h2 h3 h4 {
   font-size: 40px;
 }
 .bt {
-  flex-direction: column;
   display: flex;
+  flex-direction: column;
+  flex: 1;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
 }
 .bt button {
   padding: 20px;
@@ -92,6 +94,10 @@ h1 h2 h3 h4 {
     opacity: 1;
   }
 }
+.blinking {
+  display: inline-block;
+  animation: blink 1s infinite;
+}
 
 .section {
   background-color: white;
@@ -137,12 +143,37 @@ h1 h2 h3 h4 {
   padding: 10px;
 }
 .score {
-  -webkit-box-shadow: 1px 6px 11px 1px rgba(0, 0, 0, 0.55);
-  -moz-box-shadow: 1px 6px 11px 1px rgba(0, 0, 0, 0.55);
   box-shadow: 1px 6px 11px 1px rgba(0, 0, 0, 0.55);
-  padding: 25px;
-  width: 450px;
-  height: 100px;
+  padding: 30px;
+  flex: 1;
   text-align: center;
   color: #fff;
+  background-color: rgb(146, 146, 247);
+  margin-right: 30px;
+}
+
+.bep-score {
+  transform: scaleX(0.5);
+}
+.has-background-light {
+  background-color: lightgray;
+}
+
+.has-background-remaining {
+  background-color: #f0f0f0; /* Adjust the color as needed */
+}
+
+@media (max-width: 550px) {
+  .top {
+    flex-direction: column;
+  }
+  h1 {
+    font-size: 30px;
+  }
+  h2 {
+    font-size: 25px;
+  }
+  p {
+    font-size: 20px;
+  }
 }
