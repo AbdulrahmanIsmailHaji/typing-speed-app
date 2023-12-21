@@ -1,9 +1,11 @@
 "use client";
 import { generate } from "random-words";
 import { useEffect, useState } from "react";
-import Results from "./Components/Results";
-import Word from "./Components/Word";
-import Start from "./Components/Start";
+
+import Word from "@/Components/Word";
+import Start from "@/Components/Start";
+import Results from "@/Components/Results";
+
 const NUMB_OF_WORDS = 200;
 
 export default function Home() {

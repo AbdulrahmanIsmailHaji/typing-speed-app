@@ -1,6 +1,4 @@
-import { generate } from "random-words";
 import { useEffect, useRef, useState } from "react";
-const NUMB_OF_WORDS = 200;
 
 const Word = ({
   status,

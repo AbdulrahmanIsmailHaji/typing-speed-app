@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+"use client";
+import React, { useEffect, useRef } from "react";
 import Scores from "./Scores";
 import Input from "./Input";
 
@@ -35,6 +36,7 @@ const Start = ({
       inputRef.current.focus();
     }
   }, [status]);
+
   const checkMatch = () => {
     const compareWord = words[currWordIndex];
     const match = compareWord === currInput.trim();
