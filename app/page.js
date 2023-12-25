@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Word from "@/Components/Word";
 import Start from "@/Components/Start";
 import Results from "@/Components/Results";
+import { useSession } from "next-auth/react";
 
 const NUMB_OF_WORDS = 200;
 
@@ -12,20 +13,24 @@ export default function Home() {
   const [words, setWords] = useState([]);
   const [selectedTime, setSelectedTime] = useState(60);
   const [countDown, setCountDown] = useState(0);
-  const [status, setStatus] = useState();
+  const [statusCode, setStatusCode] = useState("waiting");
 
   const [currWordIndex, setCurrWordIndex] = useState(0);
   const [currCharIndex, setCurrCharIndex] = useState(-1);
   const [currChar, setCurrChar] = useState("");
   const [correct, setCorrect] = useState(0);
   const [incorrect, setIncorrect] = useState(0);
-  const [scores, setScores] = useState(0);
 
   //state for out record
   const [score15, setScore15] = useState(0);
   const [score30, setScore30] = useState(0);
   const [score60, setScore60] = useState(0);
+
   const [currInput, setCurrInput] = useState("");
+
+  const session = useSession();
+
+  const { status, data: userData } = session;
 
   const generateWord = () => {
     return new Array(NUMB_OF_WORDS).fill(null).map(() => generate());
@@ -39,19 +44,19 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (status === "finished") {
-      updateScores();
-    }
-  }, [status]);
-  useEffect(() => {
     setCountDown(selectedTime);
   }, [selectedTime]);
 
+  useEffect(() => {
+    if (statusCode === "finished") {
+      sendScores();
+    }
+  }, [statusCode]);
   const handleTimeChange = (e) => {
     setSelectedTime(parseInt(e.target.value, 10));
   };
 
-  const updateScores = () => {
+  const sendScores = async () => {
     const currentScore = correct;
 
     if (selectedTime === 15) {
@@ -67,22 +72,45 @@ export default function Home() {
         setScore60(currentScore);
       }
     }
+    if (status === "authenticated") {
+      try {
+        const res = await fetch("http://localhost:3000/api/user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: userData?.user?.name,
+            email: userData?.user?.email,
+            score15: selectedTime === 15 ? currentScore : score15,
+            score30: selectedTime === 30 ? currentScore : score30,
+            score60: selectedTime === 60 ? currentScore : score60,
+          }),
+        });
 
-    setScores(currentScore);
+        if (res.ok) {
+          console.log("New scores created successfully");
+        } else {
+          console.error("Failed to create new scores");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
   };
 
   return (
     <>
       <h1>Let's know how much power do you have in word typing</h1>
       <Start
-        status={status}
+        statusCode={statusCode}
         setWords={setWords}
         setCurrCharIndex={setCurrCharIndex}
         setCurrWordIndex={setCurrWordIndex}
         setIncorrect={setIncorrect}
         setCorrect={setCorrect}
         setCurrChar={setCurrChar}
-        setStatus={setStatus}
+        setStatusCode={setStatusCode}
         selectedTime={selectedTime}
         currWordIndex={currWordIndex}
         countDown={countDown}
@@ -100,7 +128,7 @@ export default function Home() {
         currInput={currInput}
         setCurrInput={setCurrInput}
       />
-      {status === "started" && (
+      {statusCode === "started" && (
         <Word
           generateWord={generateWord}
           words={words}
@@ -108,11 +136,11 @@ export default function Home() {
           currChar={currChar}
           currCharIndex={currCharIndex}
           currWordIndex={currWordIndex}
-          status={status}
+          statusCode={statusCode}
           currInput={currInput}
         />
       )}
-      {status === "finished" && (
+      {statusCode === "finished" && (
         <Results
           selectedTime={selectedTime}
           correct={correct}

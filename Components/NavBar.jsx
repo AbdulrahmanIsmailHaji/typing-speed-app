@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
-import SignInBtn from "./signInBtn";
+import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -22,6 +21,7 @@ const Navbar = () => {
           )}
 
           <span className="user-name">{session.user.name}</span>
+
           <button onClick={() => signOut()} className="button">
             Sign Out
           </button>

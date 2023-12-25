@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const Word = ({
-  status,
+  statusCode,
   currChar,
   currCharIndex,
   currWordIndex,
@@ -18,7 +18,7 @@ const Word = ({
       wordIdx === currWordIndex &&
       charIdx === currCharIndex &&
       currChar &&
-      status !== "finished"
+      statusCode !== "finished"
     ) {
       if (char === currChar) {
         return "has-background-success";
@@ -29,7 +29,7 @@ const Word = ({
       wordIdx === currWordIndex &&
       charIdx === currCharIndex + 1 &&
       currInput[currCharIndex] === " " &&
-      status !== "finished"
+      statusCode !== "finished"
     ) {
       return "has-background-light"; // Apply a different background for the space
     } else if (
@@ -40,7 +40,7 @@ const Word = ({
     } else if (
       wordIdx === currWordIndex &&
       charIdx > currCharIndex &&
-      status !== "finished"
+      statusCode !== "finished"
     ) {
       return "has-background-remaining"; // Apply a different background for remaining characters
     } else {

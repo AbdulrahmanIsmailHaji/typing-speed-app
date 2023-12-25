@@ -1,3 +1,4 @@
+// models/user.js
 import mongoose, { Schema, models } from "mongoose";
 
 const userSchema = new Schema(
@@ -10,17 +11,20 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    highScore15: {
+    score15: {
       type: Number,
       required: true,
+      default: 0, // Add a default value if needed
     },
-    highScore30: {
+    score30: {
       type: Number,
       required: true,
+      default: 0,
     },
-    highScore60: {
+    score60: {
       type: Number,
       required: true,
+      default: 0,
     },
   },
   { timestamps: true }
