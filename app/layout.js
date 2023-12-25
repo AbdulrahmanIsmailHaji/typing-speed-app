@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/Components/NavBar";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { NextAuthProvider } from "./Providers";

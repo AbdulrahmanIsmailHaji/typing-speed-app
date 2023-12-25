@@ -1,6 +1,5 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import User from "@/model/user";
-import { useSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
