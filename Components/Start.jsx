@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
+"use client";
+import React, { useEffect, useRef } from "react";
 import Scores from "./Scores";
 import Input from "./Input";
 
 const Start = ({
-  status,
+  statusCode,
   setWords,
   setCurrCharIndex,
   setCurrWordIndex,
   setIncorrect,
   setCorrect,
   setCurrChar,
-  setStatus,
+  setStatusCode,
   selectedTime,
   currWordIndex,
   countDown,
@@ -31,10 +32,11 @@ const Start = ({
   const inputRef = useRef(null);
 
   useEffect(() => {
-    if (status === "started") {
+    if (statusCode === "started") {
       inputRef.current.focus();
     }
-  }, [status]);
+  }, [statusCode]);
+
   const checkMatch = () => {
     const compareWord = words[currWordIndex];
     const match = compareWord === currInput.trim();
@@ -45,7 +47,7 @@ const Start = ({
     }
   };
   const handleStart = () => {
-    if (status === "finished") {
+    if (statusCode === "finished") {
       setWords(generateWord());
       setCurrWordIndex(0);
       setCorrect(0);
@@ -53,13 +55,14 @@ const Start = ({
       setCurrCharIndex(-1);
       setCurrChar("");
     }
-    if (status !== "started") {
-      setStatus("started");
+    if (statusCode !== "started") {
+      setStatusCode("started");
+
       const interval = setInterval(() => {
         setCountDown((prev) => {
           if (prev === 0) {
             clearInterval(interval);
-            setStatus("finished");
+            setStatusCode("finished");
             setCurrInput("");
             return selectedTime;
           } else {
@@ -95,7 +98,7 @@ const Start = ({
           <button onClick={handleStart}> START</button>
           <p>Please Choose A Time</p>
           <select
-            disabled={status === "started"}
+            disabled={statusCode === "started"}
             onChange={handleTimeChange}
             value={selectedTime}
           >
