@@ -1,10 +1,17 @@
 import React from "react";
 
-const Input = ({ currInput, handleKeyDown, inputRef, setCurrInput }) => {
+const Input = ({
+  statusCode,
+  currInput,
+  handleKeyDown,
+  inputRef,
+  setCurrInput,
+}) => {
   return (
     <>
       <div className="input-field">
         <textarea
+          disabled={statusCode === "finished"}
           value={currInput}
           onKeyDown={handleKeyDown}
           ref={inputRef}

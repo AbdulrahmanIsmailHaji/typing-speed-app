@@ -1,12 +1,8 @@
-import SignInBtn from "@/Components/signInBtn";
+import SignInBtn from "@/Components/SignInBtn";
 import React from "react";
 
 const SignIn = () => {
-  return (
-    <div className="">
-      <SignInBtn />
-    </div>
-  );
+  return <SignInBtn />;
 };
 
 export default SignIn;

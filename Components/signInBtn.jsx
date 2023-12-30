@@ -9,9 +9,16 @@ export default function SignInBtn() {
   };
 
   return (
-    <button onClick={handleSignIn} className="signinBtn">
-      <Image alt="google logo" src="/google-logo.png" width={30} height={30} />
-      <span className="btnContainer">Sign in with Google</span>
-    </button>
+    <div className="signin-container">
+      <button onClick={handleSignIn} className="signinBtn">
+        <Image
+          alt="google logo"
+          src="/google-logo.png"
+          width={30}
+          height={30}
+        />
+        <span className="btnContainer">Sign in with Google</span>
+      </button>
+    </div>
   );
 }
