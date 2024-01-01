@@ -150,7 +150,7 @@ const Start = ({
     setCurrChar("");
     setResetState(false);
     setStatusCode("waiting");
-    setSelectedTime(60);
+
     setCountDown(selectedTime);
 
     // Clear the interval by checking if it exists
