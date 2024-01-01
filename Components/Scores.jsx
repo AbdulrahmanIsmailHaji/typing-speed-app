@@ -1,6 +1,8 @@
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
+import Link from "next/link";
+
 const Scores = ({ score15, score30, score60 }) => {
   const [scores, setScores] = useState(null);
   const session = useSession();
@@ -55,16 +57,20 @@ const Scores = ({ score15, score30, score60 }) => {
   if (!scores) {
     return (
       <div className="score">
-        <p>This is the score record:</p>
+        <p>This is the HighScore record:</p>
+        <p>
+          <Link href="/login">Sign in </Link>
+          to save your highest score and keep track of your achievements!
+        </p>
         <p>
           Words per 60 seconds:{" "}
-          <span className="bep-score">{score60.toFixed(2)}</span>
+          <span className="bep-score">{score60 ? score60.toFixed(2) : 0}</span>
           <br />
           Words per 30 seconds:{" "}
-          <span className="bep-score">{score30.toFixed(2)}</span>
+          <span className="bep-score">{score30 ? score30.toFixed(2) : 0}</span>
           <br />
           Words per 15 seconds:{" "}
-          <span className="bep-score">{score15.toFixed(2)}</span>
+          <span className="bep-score">{score15 ? score15.toFixed(2) : 0}</span>
         </p>
       </div>
     );
